@@ -27,6 +27,7 @@ import (
 	. "github.com/onsi/gomega"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
+	"sigs.k8s.io/cli-utils/pkg/kstatus/polling"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
@@ -94,6 +95,7 @@ var _ = BeforeSuite(func(done Done) {
 		Client:                k8sManager.GetClient(),
 		Scheme:                scheme.Scheme,
 		EventRecorder:         k8sManager.GetEventRecorderFor("kustomize-controller"),
+		StatusPoller:          polling.NewStatusPoller(k8sManager.GetClient(), k8sManager.GetRESTMapper()),
 		ExternalEventRecorder: nil,
 	}).SetupWithManager(k8sManager, KustomizationReconcilerOptions{MaxConcurrentReconciles: 1})
 	Expect(err).ToNot(HaveOccurred(), "failed to setup KustomizationReconciler")

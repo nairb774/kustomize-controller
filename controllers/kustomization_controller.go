@@ -230,7 +230,7 @@ func (r *KustomizationReconciler) Reconcile(ctx context.Context, req ctrl.Reques
 	if reconcileErr != nil {
 		// record the reconciliation error
 		r.recordReadiness(ctx, reconciledKustomization)
-		return ctrl.Result{RequeueAfter: kustomization.GetRetryInterval()}, reconcileErr
+		return ctrl.Result{RequeueAfter: kustomization.Spec.Interval.Duration}, nil
 	}
 
 	log.Info(fmt.Sprintf("Reconciliation finished in %s, next run in %s",
